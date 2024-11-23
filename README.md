@@ -98,7 +98,12 @@ bash-frontend/
 ---
 
 ## Testing
-## Promotion Handling Test Suite
+**Promotion Handling Test Suite**  
+**Partitioning the Characteristics**  
+| Characteristic    | b1       | b2       | b3       |  
+|--------------------|----------|----------|----------|  
+| C1 = Promotion ID | Valid    | Expired  | Invalid  |  
+| C2 = Cart Items   | None     | Single   | Multiple |  
 
 **Testable Functions**  
 **Method**: `fetchPromotions()`  
@@ -106,12 +111,6 @@ bash-frontend/
 - **Return Type**: `Array` of promotion objects  
 - **Return Value**: Successfully retrieves and returns promotion data.  
 - **Exceptional Behavior**: Handles API errors or invalid responses gracefully.  
-**Partitioning the Characteristics**  
-| Characteristic    | b1       | b2       | b3       |  
-|--------------------|----------|----------|----------|  
-| C1 = Promotion ID | Valid    | Expired  | Invalid  |  
-| C2 = Cart Items   | None     | Single   | Multiple |  
-
 
 **Interface-Based Characteristics**  
 **Combining Partitions to Define Test Requirements (ACOC):**  
@@ -151,10 +150,7 @@ bash-frontend/
 | **T4**    | Non-empty          | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates. Select mode UI is inactive. |
 | **T5**    | Large cart         | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates for a large cart. Select mode UI is inactive. |
 
----
 
-
--
 
 
 ### Unit Tests
