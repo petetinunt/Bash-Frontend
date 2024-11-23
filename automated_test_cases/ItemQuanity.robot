@@ -4,8 +4,7 @@ Library    SeleniumLibrary
 *** Variables ***
 ${URL}             http://localhost:3000/
 ${CART_URL}        http://localhost:3000/cart
-${MENU_ITEM}       Latte
-${POPUP_MESSAGE}   Item added to cart successfully!
+${MENU_ITEM}       Dirty
 ${DELAY}           1s
 ${TIMEOUT}         10s
 
@@ -17,12 +16,8 @@ Open Browser To Website
 
 Add to cart
     [Documentation]  Add beverage to cart page
-    Wait Until Element Is Visible    xpath=//div[@id="Card" and .//h3[@id="CardTitle" and text()="${MENU_ITEM}"]]    timeout=${TIMEOUT}
     Click Element    xpath=//div[@id="Card" and .//h3[@id="CardTitle" and text()="${MENU_ITEM}"]]//button[@id="Addbtn"]
     Wait Until Element Is Visible    id=description-page    timeout=${TIMEOUT}
-    Click Element    xpath=//button[text()='Cold']
-    Sleep    ${DELAY}
-    Wait Until Element Is Visible    id=Options    timeout=${TIMEOUT}
     Click Element    xpath=//button[text()='Add to Cart']
     Sleep    ${DELAY}
 

@@ -11,12 +11,14 @@ ${POINT_ELEMENT}        //span[contains(@class, 'membershipScore')]
 ${INVALID_MESSAGE}      //span[contains(@class, 'membershipInvalid')]
 
 *** Keywords ***
-Open Payment Page
+Open Browser To Website
+    [Documentation]  Open the browser and navigate to the website.
     Open Browser    ${URL}    Chrome
     Maximize Browser Window
     Wait Until Element Is Visible    ${MEMBERSHIP_INPUT}    timeout=10s
 
 Input Membership Number
+    [Documentation]  Input membership number.
     [Arguments]    ${membership_number}
     Input Text    ${MEMBERSHIP_INPUT}    ${membership_number}
 
@@ -25,7 +27,8 @@ Click Membership Apply Button
 
 *** Test Cases ***
 Check Validate Membership
-    [Setup]    Open Payment Page
+    [Documentation]  check validate membership.
+    Open Browser To Website
     Input Membership Number    ${VALIDMEMBERSHIP}
     Click Membership Apply Button
     Wait Until Element Is Visible    ${POINT_ELEMENT}    timeout=10s
@@ -35,7 +38,8 @@ Check Validate Membership
     Close Browser
 
 Check Invalidate Membership
-    [Setup]    Open Payment Page
+    [Documentation]  check Invalidate membership.
+    Open Browser To Website
     Input Membership Number    ${INVALIDMEMBERSHIP}
     Click Membership Apply Button
     Wait Until Element Is Visible    ${INVALID_MESSAGE}    timeout=10s
