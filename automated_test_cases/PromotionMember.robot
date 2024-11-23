@@ -14,7 +14,7 @@ ${TIMEOUT}             30s
 
 *** Keywords ***
 Open Browser To Website
-    [Documentation]  Open the browser and navigate to the website
+    [Documentation]  Open the browser and navigate to the website.
     Create WebDriver    Chrome
     Go To    ${URL}
     Maximize Browser Window

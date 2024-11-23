@@ -10,7 +10,7 @@ ${TIMEOUT}         10s
 
 *** Keywords ***
 Open Browser To Website
-    [Documentation]  Open the browser and navigate to the website
+    [Documentation]  Open the browser and navigate to the website.
     Open Browser    ${URL}    Chrome
     Maximize Browser Window
 
