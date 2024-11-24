@@ -8,9 +8,11 @@ import ReturnButton from "../components/ReturnButton/ReturnButton";
 import NavBar from "../components/Nav/Nav";
 import QRCodeModal from "../components/QRCodeModal/QRCodeModal";
 import { CartItemType, useCart } from "@/context/CartContext";
+import { isPromotionValid, calculateDiscount } from "@/lib/utilsPromotion";
+import { handleMembershipCheck } from "@/lib/utilsMembership";
+
 // const baseURL = "http://10.34.112.130:3030/";
-const baseURL = process.env.NEXT_PUBLIC_ROOT_URL;
-// const baseURL = "http://localhost:3030";
+const baseURL = "http://localhost:3030";
 // const PROMPTPAY_NUMBER = memberInfo ? memberInfo.Tel : "0000000000"; for make propmtpay_number dynamic
 
 const PROMPTPAY_NUMBER = "0866001234";
@@ -73,24 +75,15 @@ const PaymentPage: React.FC = () => {
     }
   }, [cartItems]);
 
-  const handleMembershipCheck = async () => {
-    try {
-      const response = await fetch(`${baseURL}/member/${unformattedTel}`);
-      if (response.ok) {
-        const data = await response.json();
-        setMemberInfo(data);
-        setMembershipPoints(data.Points);
-        setTelChecked(true);
-      } else {
-        throw new Error("Failed to fetch membership info");
-      }
-    } catch (error) {
-      console.error("Error fetching membership info:", error);
-      setMemberInfo(null);
-      setMembershipPoints(null);
-      setTel("");
-      setTelChecked(true);
-    }
+  const handleMembershipCheckWrapper = async () => {
+    await handleMembershipCheck(
+      unformattedTel,
+      setMemberInfo,
+      setMembershipPoints,
+      setTelChecked,
+      setTel,
+      baseURL
+    );
   };
 
   const handlePromotionSelect = async (promotion: Promotion) => {
@@ -206,69 +199,79 @@ const PaymentPage: React.FC = () => {
     setSelectedPromotion(promotion);
   };
 
-  const isPromotionValid = (promotion: Promotion): boolean => {
-    if (promotion.Pro_ID === "001") {
-      return membershipPoints !== null && membershipPoints >= 10;
-    }
+  // const isPromotionValid = (promotion: Promotion): boolean => {
+  //   if (promotion.Pro_ID === "001") {
+  //     return membershipPoints !== null && membershipPoints >= 10;
+  //   }
 
-    if (promotion.Pro_ID === "003") {
-      return memberInfo?.Alumni === true;
-    }
+  //   if (promotion.Pro_ID === "003") {
+  //     return memberInfo?.Alumni === true;
+  //   }
 
-    if (promotion.Pro_ID === "002") {
-      const now = new Date();
-      const day = now.getDay(); // 0 is Sunday, 5 is Friday
-      const hour = now.getHours();
-      return day === 5 && hour >= 13 && hour < 16;
-    }
+  //   if (promotion.Pro_ID === "002") {
+  //     const now = new Date();
+  //     const day = now.getDay(); // 0 is Sunday, 5 is Friday
+  //     const hour = now.getHours();
+  //     return day === 5 && hour >= 13 && hour < 16;
+  //   }
 
-    if (!promotion.start_date || !promotion.expiry_date) return true;
+  //   if (!promotion.start_date || !promotion.expiry_date) return true;
 
-    const now = new Date();
-    const start = new Date(promotion.start_date);
-    const expiry = new Date(promotion.expiry_date);
+  //   const now = new Date();
+  //   const start = new Date(promotion.start_date);
+  //   const expiry = new Date(promotion.expiry_date);
 
-    return now >= start && now <= expiry;
-  };
+  //   return now >= start && now <= expiry;
+  // };
 
-  const calculateDiscount = (): number => {
-    if (!selectedPromotion || !cartItems || cartItems.length === 0) return 0;
+  // const calculateDiscount = (): number => {
+  //   if (!selectedPromotion || !cartItems || cartItems.length === 0) return 0;
 
-    switch (selectedPromotion.Pro_ID) {
-      case "001": {
-        if (membershipPoints !== null && pointsRedeemed) {
-          const lowestDrinkPrice = Math.min(
-            ...cartItems.map((item) => item.price)
-          );
-          return lowestDrinkPrice;
-        }
-        return 0;
-      }
-      case "002": {
-        // 50% discount for every second drink
-        let discount = 0;
-        const sortedItems = [...cartItems].sort((a, b) => a.price - b.price);
-        for (let i = 1; i < sortedItems.length; i += 2) {
-          discount += sortedItems[i].price * 0.5;
-        }
-        return discount;
-      }
-      case "003": {
-        if (memberInfo?.Alumni) {
-          return 5;
-        }
-        return 0;
-      }
-      default:
-        return 0;
-    }
+  //   switch (selectedPromotion.Pro_ID) {
+  //     case "001": {
+  //       if (membershipPoints !== null && pointsRedeemed) {
+  //         const lowestDrinkPrice = Math.min(
+  //           ...cartItems.map((item) => item.price)
+  //         );
+  //         return lowestDrinkPrice;
+  //       }
+  //       return 0;
+  //     }
+  //     case "002": {
+  //       // 50% discount for every second drink
+  //       let discount = 0;
+  //       const sortedItems = [...cartItems].sort((a, b) => a.price - b.price);
+  //       for (let i = 1; i < sortedItems.length; i += 2) {
+  //         discount += sortedItems[i].price * 0.5;
+  //       }
+  //       return discount;
+  //     }
+  //     case "003": {
+  //       if (memberInfo?.Alumni) {
+  //         return 5;
+  //       }
+  //       return 0;
+  //     }
+  //     default:
+  //       return 0;
+  //   }
+  // };
+
+  const isPromotionValidCheck = (promotion: Promotion): boolean => {
+    return isPromotionValid(promotion, membershipPoints, memberInfo);
   };
 
   const subtotal =
     cartItems?.reduce((total, item) => total + item.price * item.quantity, 0) ??
     0;
 
-  const discount = calculateDiscount();
+  const discount = calculateDiscount(
+    selectedPromotion,
+    cartItems,
+    membershipPoints,
+    pointsRedeemed,
+    memberInfo
+  );
   const total = subtotal - discount;
 
   if (!cartItems) {
@@ -347,7 +350,7 @@ const PaymentPage: React.FC = () => {
           {tel && !membershipPoints ? (
             <button
               className={styles.checkMembershipButton}
-              onClick={handleMembershipCheck}
+              onClick={handleMembershipCheckWrapper}
             >
               Apply
             </button>
@@ -373,7 +376,7 @@ const PaymentPage: React.FC = () => {
             <p className={styles.error}>{error}</p>
           ) : (
             promotions.map((promotion) => {
-              const isValid = isPromotionValid(promotion);
+              const isValid = isPromotionValidCheck(promotion);
               const isSelected = selectedPromotion?.Pro_ID === promotion.Pro_ID;
 
               return (
