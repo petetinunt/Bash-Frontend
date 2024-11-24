@@ -120,6 +120,7 @@ bash-frontend/
 ## **Interface-Based Characteristics**
 
 ### **Combining Partitions to Define Test Requirements (ACOC):**
+**Number of Test Cases = 3 x 3 = 9**
 
 | **Test Case** | **Promotion ID** | **Cart Items** | **Expected Outcome**                                                   |
 |---------------|------------------|----------------|-------------------------------------------------------------------------|
@@ -152,8 +153,7 @@ bash-frontend/
 - **Return Value**: Returns the correct discount amount based on the selected promotion and cart items.
 
 ### **Combining Partitions for ECC**
-
-Using ECC, select **1 value from each characteristic (C1 and C2)** to form up to 3 test cases.
+**Number of Test Cases = Maximum value from largest characteristic = 3**
 
 | **Test Case** | **Promotion Rule** | **Cart Items** | **Expected Outcome**                                          |
 |---------------|--------------------|----------------|---------------------------------------------------------------|
@@ -178,14 +178,14 @@ Using ECC, select **1 value from each characteristic (C1 and C2)** to form up to
 - **Return Type**: `boolean`  
 - **Return Value**: Returns `true` if the membership is valid, `false` otherwise.
 
-### **Combining Partitions to Define Test Requirements:**
+### **Combining Partitions using ACOC**
+**Number of Test Cases = 3**
 
 | **Test Case** | **Membership Validity (C1)** | **Expected Outcome**                        |
 |---------------|-----------------------------|--------------------------------------------|
 | T1            | Valid Membership (b1)      | MembershipCheckResult.Valid                |
 | T2            | Invalid Membership (b2)    | MembershipCheckResult.Invalid              |
 | T3            | No Telephone Number (b3)   | MembershipCheckResult.Empty                |
-
 
 
 
