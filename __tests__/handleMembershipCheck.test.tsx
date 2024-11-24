@@ -1,16 +1,12 @@
 // tests/utilsMembership.test.ts
 
-import { handleMembershipCheck } from "@/lib/utilsMembership";
+import {
+  handleMembershipCheck,
+  MemberInfo,
+  MembershipCheckResult,
+} from "@/lib/utilsMembership";
 
-interface MemberInfo {
-  MID: number;
-  Mname: string;
-  Tel: string;
-  Points: number;
-  Alumni: boolean;
-}
-
-describe("Membership Check Test Suite", () => {
+describe("handleMembershipCheck Function Test Suite", () => {
   let setMemberInfo: jest.Mock;
   let setMembershipPoints: jest.Mock;
   let setTel: jest.Mock;
@@ -31,13 +27,12 @@ describe("Membership Check Test Suite", () => {
     jest.resetAllMocks();
   });
 
-  // T1: Telephone Number Provided, Membership Valid
-  it("T1: Membership info is fetched successfully when telephone number is provided and membership is valid", async () => {
-    unformattedTel = "0625916127"; // Valid telephone number from your backend data
+  // T1: Valid Membership
+  it("T1: Valid membership with alumni true", async () => {
+    unformattedTel = "0625916127";
 
-    // Mock the fetch response
     const mockMemberInfo: MemberInfo = {
-      MID: 0,
+      MID: "0",
       Mname: "Thanat Phi",
       Tel: "0625916127",
       Points: 999,
@@ -49,7 +44,7 @@ describe("Membership Check Test Suite", () => {
       json: async () => mockMemberInfo,
     });
 
-    await handleMembershipCheck(
+    const result = await handleMembershipCheck(
       unformattedTel,
       setMemberInfo,
       setMembershipPoints,
@@ -58,24 +53,23 @@ describe("Membership Check Test Suite", () => {
       baseURL
     );
 
-    expect(fetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_ROOT_URL}/member/${unformattedTel}`
-    );
+    expect(result).toBe(MembershipCheckResult.Valid);
     expect(setMemberInfo).toHaveBeenCalledWith(mockMemberInfo);
-    expect(setMembershipPoints).toHaveBeenCalledWith(mockMemberInfo.Points);
+    expect(setMembershipPoints).toHaveBeenCalledWith(999);
     expect(setTelChecked).toHaveBeenCalledWith(true);
+    expect(setTel).not.toHaveBeenCalledWith("");
   });
 
-  // T2: Telephone Number Provided, Membership Invalid
-  it("T2: Fetch fails when telephone number is provided but membership is invalid", async () => {
-    unformattedTel = "0000000000"; // Invalid telephone number
+  // T2: Invalid Membership
+  it("T2: Invalid membership", async () => {
+    unformattedTel = "0000000000";
 
-    // Mock the fetch response to simulate a failed fetch
     (fetch as jest.Mock).mockResolvedValue({
       ok: false,
+      status: 404,
     });
 
-    await handleMembershipCheck(
+    const result = await handleMembershipCheck(
       unformattedTel,
       setMemberInfo,
       setMembershipPoints,
@@ -84,20 +78,18 @@ describe("Membership Check Test Suite", () => {
       baseURL
     );
 
-    expect(fetch).toHaveBeenCalledWith(
-      `${process.env.NEXT_PUBLIC_ROOT_URL}/member/${unformattedTel}`
-    );
+    expect(result).toBe(MembershipCheckResult.Invalid);
     expect(setMemberInfo).toHaveBeenCalledWith(null);
     expect(setMembershipPoints).toHaveBeenCalledWith(null);
     expect(setTel).toHaveBeenCalledWith("");
     expect(setTelChecked).toHaveBeenCalledWith(true);
   });
 
-  // T6: Telephone Number Not Provided
-  it("T6: Fetch is not attempted when telephone number is not provided", async () => {
-    unformattedTel = ""; // No telephone number provided
+  // T3: No Telephone Number Provided (Empty)
+  it("T3: No telephone number provided", async () => {
+    unformattedTel = "";
 
-    await handleMembershipCheck(
+    const result = await handleMembershipCheck(
       unformattedTel,
       setMemberInfo,
       setMembershipPoints,
@@ -106,6 +98,7 @@ describe("Membership Check Test Suite", () => {
       baseURL
     );
 
+    expect(result).toBe(MembershipCheckResult.Empty);
     expect(fetch).not.toHaveBeenCalled();
     expect(setMemberInfo).toHaveBeenCalledWith(null);
     expect(setMembershipPoints).toHaveBeenCalledWith(null);
