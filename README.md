@@ -98,57 +98,94 @@ bash-frontend/
 ---
 
 ## Testing
-**Promotion Handling Test Suite**  
-**Partitioning the Characteristics**  
-| Characteristic    | b1       | b2       | b3       |  
-|--------------------|----------|----------|----------|  
-| C1 = Promotion ID | Valid    | Expired  | Invalid  |  
-| C2 = Cart Items   | None     | Single   | Multiple |  
+# **TestSuite1:Promotion Handling Test Suite**
 
-**Testable Functions**  
-**Method**: `fetchPromotions()`  
-- **Parameters**: None  
-- **Return Type**: `Array` of promotion objects  
-- **Return Value**: Successfully retrieves and returns promotion data.  
-- **Exceptional Behavior**: Handles API errors or invalid responses gracefully.  
+## **Partitioning the Characteristics**
 
-**Interface-Based Characteristics**  
-**Combining Partitions to Define Test Requirements (ACOC):**  
-| Test Case | Promotion ID | Cart Items | Expected Outcome                                   |  
-|-----------|--------------|------------|---------------------------------------------------|  
-| T1        | Valid        | None       | Promotions are fetched but no discount applied.   |  
-| T2        | Valid        | Single     | Promotion is successfully applied.                |  
-| T3        | Valid        | Multiple   | Promotion is successfully applied to multiple items. |  
-| T4        | Expired      | None       | Promotions are fetched but no discount applied.   |  
-| T5        | Expired      | Single     | Promotion is not applied due to expiration.       |  
-| T6        | Expired      | Multiple   | Promotion is not applied due to expiration.       |  
-| T7        | Invalid      | None       | Promotions are fetched but invalid promotion is ignored. |  
-| T8        | Invalid      | Single     | Promotion is ignored as it is invalid.            |  
-| T9        | Invalid      | Multiple   | Promotion is ignored as it is invalid.            |  
+| **Characteristic** | **b1**    | **b2**     | **b3**     |
+|---------------------|-----------|------------|------------|
+| C1 = Promotion ID  | Valid     | Expired    | Invalid    |
+| C2 = Cart Items    | None      | Single     | Multiple   |
 
+## **Testable Functions**
 
-## CartPage Test Suite
-**Interface-Based Characteristics**
+**Method**: `isPromotionValid()`  
+- **Parameters**: `promotion, memberInfo.Points, memberInfo`  
+- **Return Type**: `boolean`  
+- **Return Value**: Returns `true` if the promotion is valid under the given conditions, `false` if the promotion is invalid.  
+- **Exceptional Behavior**: Handles invalid inputs gracefully. For invalid date formats or invalid promotion IDs, it returns `false` and may log a warning.
 
-| **Test Case** | **Cart Items Present** | **Select Mode** | **Quantity Change Trigger** | **Expected Outcome**                                                                 |
-|---------------|-------------------------|-----------------|-----------------------------|-------------------------------------------------------------------------------------|
-| **T1**        | Empty                  | `false`         | None                        | Total is `0`. No items to display. Quantity buttons are disabled.                  |
-| **T2**        | Non-empty              | `false`         | Increase                    | Item quantity is incremented. Total updates accordingly. Select mode UI is inactive. |
-| **T3**        | Non-empty              | `true`          | Increase                    | Item quantity is incremented. Select mode UI is active. Total updates accordingly.  |
-| **T4**        | Non-empty              | `false`         | Decrease                    | Item quantity is decreased (if greater than 1). Total updates. Select mode UI is inactive. |
-| **T5**        | Large cart             | `false`         | Decrease                    | Item quantity is decreased (if greater than 1). Total 
+---
 
+## **Interface-Based Characteristics**
 
-**Combining the Partitions (PWC)**
-**By combining these partitions, we create test cases to validate the component's behavior.**
+### **Combining Partitions to Define Test Requirements (ACOC):**
+**Number of Test Cases = 3 x 3 = 9**
 
-| Test Case | Cart Items Present | Select Mode | Quantity Change Trigger | Expected Outcome |
-|-----------|--------------------|-------------|-------------------------|------------------|
-| **T1**    | Empty              | `false`     | None                    | Total is `0`. No items to display. Quantity buttons are disabled. |
-| **T2**    | Non-empty          | `false`     | Increase                | Item quantity is incremented. Total updates accordingly. Select mode UI is inactive. |
-| **T3**    | Non-empty          | `true`      | Increase                | Item quantity is incremented. Select mode UI is active. Total updates accordingly. |
-| **T4**    | Non-empty          | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates. Select mode UI is inactive. |
-| **T5**    | Large cart         | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates for a large cart. Select mode UI is inactive. |
+| **Test Case** | **Promotion ID** | **Cart Items** | **Expected Outcome**                                                   |
+|---------------|------------------|----------------|-------------------------------------------------------------------------|
+| T1            | Valid            | None           | Promotions are applied, but no discount is applied (empty cart).        |
+| T2            | Valid            | Single         | Promotion is valid and can be applied to the single item.               |
+| T3            | Valid            | Multiple       | Promotion is valid and can be applied to multiple items.                |
+| T4            | Expired          | None           | Promotion is invalid due to expiration; no discount applied.            |
+| T5            | Expired          | Single         | Promotion is invalid due to expiration; no discount applied.            |
+| T6            | Expired          | Multiple       | Promotion is invalid due to expiration; no discount applied.            |
+| T7            | Invalid          | None           | Promotion is invalid (unknown ID); no discount applied.                 |
+| T8            | Invalid          | Single         | Promotion is invalid (unknown ID); no discount applied.                 |
+| T9            | Invalid          | Multiple       | Promotion is invalid (unknown ID); no discount applied.                 |
+
+---
+
+# **TestSuite2:Discount Calculation Test Suite**
+
+## **Partitioning the Characteristics**
+
+| **Characteristic**          | **b1**    | **b2**    | **b3**     |
+|------------------------------|-----------|-----------|------------|
+| **C1 = Promotion Rule**      | Rule 1    | Rule 2    | Rule 3     |
+| **C2 = Cart Items**          | None      | Single    | Multiple   |
+
+## **Testable Functions**
+
+**Method**: `calculateDiscount()`  
+- **Parameters**: `selectedPromotion, cartItems, membershipPoints, pointsRedeemed, memberInfo`  
+- **Return Type**: `Number`  
+- **Return Value**: Returns the correct discount amount based on the selected promotion and cart items.
+
+### **Combining Partitions for ECC**
+**Number of Test Cases = Maximum value from largest characteristic = 3**
+
+| **Test Case** | **Promotion Rule** | **Cart Items** | **Expected Outcome**                                          |
+|---------------|--------------------|----------------|---------------------------------------------------------------|
+| T1            | Rule 1            | None           | No discount applied because cart is empty.                    |
+| T2            | Rule 2            | Single         | Discount is calculated for the single item based on Rule 2.   |
+| T3            | Rule 3            | Multiple       | Discount is applied as per Rule 3 for multiple items.          |
+
+---
+
+# **TestSuite3:Membership Check Test Suite**
+
+## **Functionality-Based Characteristics**
+
+| **Characteristic** | **b1**               | **b2**                | **b3**                      |
+|---------------------|----------------------|-----------------------|-----------------------------|
+| C1 = Membership     | Valid Membership    | Invalid Membership    | Not Applicable (No Number) |
+
+## **Testable Functions**
+
+**Method**: `handleMembershipCheck()`  
+- **Parameters**: `unformattedTel, setMemberInfo, setMembershipPoints, setTelChecked, setTel, baseURL`  
+- **Return Type**: `boolean`  
+- **Return Value**: Returns `true` if the membership is valid, `false` otherwise.
+
+### **Combining Partitions using ACOC**
+**Number of Test Cases = 3**
+
+| **Test Case** | **Membership Validity (C1)** | **Expected Outcome**                        |
+|---------------|-----------------------------|--------------------------------------------|
+| T1            | Valid Membership (b1)      | MembershipCheckResult.Valid                |
+| T2            | Invalid Membership (b2)    | MembershipCheckResult.Invalid              |
+| T3            | No Telephone Number (b3)   | MembershipCheckResult.Empty                |
 
 
 
