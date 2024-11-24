@@ -98,7 +98,7 @@ bash-frontend/
 ---
 
 ## Testing
-# **Promotion Handling Test Suite**
+# **TestSuite1:Promotion Handling Test Suite**
 
 ## **Partitioning the Characteristics**
 
@@ -136,7 +136,7 @@ bash-frontend/
 
 ---
 
-# **Discount Calculation Test Suite**
+# **TestSuite2:Discount Calculation Test Suite**
 
 ## **Partitioning the Characteristics**
 
@@ -163,7 +163,7 @@ bash-frontend/
 
 ---
 
-# **Membership Check Test Suite**
+# **TestSuite3:Membership Check Test Suite**
 
 ## **Functionality-Based Characteristics**
 
