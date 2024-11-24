@@ -4,7 +4,7 @@ Library    SeleniumLibrary
 *** Variables ***
 ${URL}                  http://localhost:3000/paymentpage
 ${VALIDMEMBERSHIP}      0123456789
-${INVALIDMEMBERSHIP}    888888888
+${INVALIDMEMBERSHIP}    0000000000
 ${MEMBERSHIP_INPUT}     //input[@placeholder='08X-XXX-XXXX']
 ${CHECK_BUTTON}         //button[contains(@class, 'checkMembershipButton')]
 ${POINT_ELEMENT}        //span[contains(@class, 'membershipScore')]
