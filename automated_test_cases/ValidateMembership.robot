@@ -12,7 +12,7 @@ ${INVALID_MESSAGE}      //span[contains(@class, 'membershipInvalid')]
 
 *** Keywords ***
 Open Browser To Website
-    [Documentation]  Open the browser and navigate to the website.
+    [Documentation]  Open the Chrome browser.
     Open Browser    ${URL}    Chrome
     Maximize Browser Window
     Wait Until Element Is Visible    ${MEMBERSHIP_INPUT}    timeout=10s

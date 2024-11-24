@@ -10,19 +10,19 @@ ${TIMEOUT}         10s
 
 *** Keywords ***
 Open Browser To Website
-    [Documentation]  Open the browser and navigate to the website.
+    [Documentation]  Open the Chrome browser.
     Open Browser    ${URL}    Chrome
     Maximize Browser Window
 
 Add to cart
-    [Documentation]  Add beverage to cart page
+    [Documentation]  Add beverage to cart page.
     Click Element    xpath=//div[@id="Card" and .//h3[@id="CardTitle" and text()="${MENU_ITEM}"]]//button[@id="Addbtn"]
     Wait Until Element Is Visible    id=description-page    timeout=${TIMEOUT}
     Click Element    xpath=//button[text()='Add to Cart']
     Sleep    ${DELAY}
 
 Go To Cart Page
-    [Documentation]  navigates to the cart page.
+    [Documentation]  Navigates to the cart page.
     Go To    ${CART_URL}
     Wait Until Page Contains Element    xpath=//div[contains(@class, 'itemContainer')]    timeout=${TIMEOUT}
     Sleep    ${DELAY}
