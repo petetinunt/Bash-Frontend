@@ -10,6 +10,13 @@ export interface MemberInfo {
   Alumni: boolean;
 }
 
+export enum MembershipCheckResult {
+  Valid = "Valid",
+  Invalid = "Invalid",
+  Empty = "Empty",
+  Error = "Error",
+}
+
 export async function handleMembershipCheck(
   unformattedTel: string,
   setMemberInfo: React.Dispatch<React.SetStateAction<MemberInfo | null>>,
@@ -17,13 +24,13 @@ export async function handleMembershipCheck(
   setTelChecked: React.Dispatch<React.SetStateAction<boolean>>,
   setTel: React.Dispatch<React.SetStateAction<string>>,
   baseURL: string
-): Promise<void> {
+): Promise<MembershipCheckResult> {
   if (!unformattedTel) {
     setMemberInfo(null);
     setMembershipPoints(null);
     setTel("");
     setTelChecked(true);
-    return;
+    return MembershipCheckResult.Empty;
   }
 
   try {
@@ -33,6 +40,15 @@ export async function handleMembershipCheck(
       setMemberInfo(data);
       setMembershipPoints(data.Points);
       setTelChecked(true);
+      return MembershipCheckResult.Valid;
+    } else if (response.status === 404) {
+      // Membership does not exist
+      setMemberInfo(null);
+      setMembershipPoints(null);
+      setTel("");
+      setTelChecked(true);
+      console.error("Membership not found");
+      return MembershipCheckResult.Invalid;
     } else {
       throw new Error("Failed to fetch membership info");
     }
@@ -42,5 +58,6 @@ export async function handleMembershipCheck(
     setMembershipPoints(null);
     setTel("");
     setTelChecked(true);
+    return MembershipCheckResult.Error;
   }
 }

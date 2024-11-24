@@ -9,7 +9,10 @@ import NavBar from "../components/Nav/Nav";
 import QRCodeModal from "../components/QRCodeModal/QRCodeModal";
 import { CartItemType, useCart } from "@/context/CartContext";
 import { isPromotionValid, calculateDiscount } from "@/lib/utilsPromotion";
-import { handleMembershipCheck } from "@/lib/utilsMembership";
+import {
+  handleMembershipCheck,
+  MembershipCheckResult,
+} from "@/lib/utilsMembership";
 
 // const baseURL = "http://10.34.112.130:3030/";
 const baseURL = "http://localhost:3030";

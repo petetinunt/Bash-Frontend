@@ -1,4 +1,3 @@
-// tests/utilsPayment.test.ts
 import { isPromotionValid, Promotion, MemberInfo } from "@/lib/utilsPromotion";
 import { CartItemType } from "@/context/CartContext";
 
