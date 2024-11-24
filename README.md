@@ -98,10 +98,6 @@ bash-frontend/
 ---
 
 ## Testing
-Here is the copied text from the images:
-
----
-
 **Promotion Handling Test Suite**  
 **Partitioning the Characteristics**  
 | Characteristic    | b1       | b2       | b3       |  
@@ -116,8 +112,6 @@ Here is the copied text from the images:
 - **Return Value**: Successfully retrieves and returns promotion data.  
 - **Exceptional Behavior**: Handles API errors or invalid responses gracefully.  
 
----
-
 **Interface-Based Characteristics**  
 **Combining Partitions to Define Test Requirements (ACOC):**  
 | Test Case | Promotion ID | Cart Items | Expected Outcome                                   |  
@@ -131,9 +125,6 @@ Here is the copied text from the images:
 | T7        | Invalid      | None       | Promotions are fetched but invalid promotion is ignored. |  
 | T8        | Invalid      | Single     | Promotion is ignored as it is invalid.            |  
 | T9        | Invalid      | Multiple   | Promotion is ignored as it is invalid.            |  
-
----
-
 
 
 ## CartPage Test Suite
@@ -159,10 +150,7 @@ Here is the copied text from the images:
 | **T4**    | Non-empty          | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates. Select mode UI is inactive. |
 | **T5**    | Large cart         | `false`     | Decrease                | Item quantity is decreased (if greater than 1). Total updates for a large cart. Select mode UI is inactive. |
 
----
 
-
--
 
 
 ### Unit Tests
