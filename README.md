@@ -1,30 +1,23 @@
 # Bash Coffee Shop Frontend ☕️
-![Build Status](https://github.com/rsrfay/Bash-Frontend/actions/workflows/webpack.yml/badge.svg) 
-[![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen.svg)](https://github.com/rsrfay/Bash-Frontend/blob/f5cdda.../README.md)
 
-This project is the frontend application for the **Bash Coffee Shop**, designed to provide a dynamic, user-friendly web-based interface for customers to browse the menu, search for items, sort by preferences, and customize orders before adding them to the cart.
+The project is a web-based frontend application built using Next.js for Bash Coffee Shop, offering a dynamic user interface for customers to browse, search, and customize orders before adding them to the cart. It also focuses on payment processes, including order summary, promotion, discount, membership points, and total price. 
 
 This project was developed by using Next.js, performed unit tests using Jest, and implemented automated UI tests using Robot Framework.
 
 ## Features
 
-### Menu Features (ECHO Group Contribution)
-- **Search:** Customers can search for menu items by name.
-- **Filter:** Customers can filter menu items by category and hot/cold option.
-- **Sort:** Customers can sort menu items by:
-  - Price (Low to High)
-  - Price (High to Low)
-- **Add-Ons:** Customers can customize their drinks with optional add-ons.
-- **Cart Integration:** Users can add items to the cart with selected customizations.
-
-### Menu Features (Noppo Group Contribution)
-- **Update Items In Cart**: Customer can add update and delete for each menu items in cart
-- **Payment**:
+### Menu Features (Noppo Group Contribution) 
+- **Order Summary:** Customers can view a summary of their order, including items, quantities, and pricing. 
+- **Update Items In Cart:** Customers can edit the details of their order, such as adjusting quantities or removing items, and have those changes reflected in real time. 
+- **Promotions and Discounts:** Customers can apply relevant promotions to their orders, which will automatically update the total price. 
+- **Membership Point Tracking:** Customers can collect membership points based on their purchases, which can be used for future discounts or rewards. 
+- **Total Price Calculation:** The application will accurately calculate the total price of the customer's order, factoring in any discounts or promotions. 
 
 ### User Experience
-- Fully responsive design for both mobile and desktop users.
-- "No results found" feedback for invalid search queries.
-- Real-time updates to cart items and pricing.
+- Real-time order summary updates as customers make changes 
+- Clear display of original price, discounts, and final discounted price from using promotion or discount 
+- Prominent display of the customer's membership point balance 
+- Real-time total price calculation and updates as customers apply discounts 
 
 ---
 
@@ -98,7 +91,7 @@ bash-frontend/
 ---
 
 ## Testing
-# **TestSuite1:Promotion Handling Test Suite**
+# **TestSuite 1: Promotion Handling Test Suite**
 
 ## **Partitioning the Characteristics**
 
@@ -136,7 +129,7 @@ bash-frontend/
 
 ---
 
-# **TestSuite2:Discount Calculation Test Suite**
+# **TestSuite 2: Discount Calculation Test Suite**
 
 ## **Partitioning the Characteristics**
 
@@ -163,7 +156,7 @@ bash-frontend/
 
 ---
 
-# **TestSuite3:Membership Check Test Suite**
+# **TestSuite 3: Membership Check Test Suite**
 
 ## **Functionality-Based Characteristics**
 
