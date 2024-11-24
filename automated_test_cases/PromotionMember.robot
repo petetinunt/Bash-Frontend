@@ -8,7 +8,6 @@ ${PAYMENT_URL}         http://localhost:3000/paymentpage
 ${VALIDMEMBERSHIP}     0625916127
 ${MEMBERSHIP_INPUT}    //input[@placeholder='08X-XXX-XXXX']
 ${CHECK_BUTTON}        //button[contains(@class, 'checkMembershipButton')]
-${MENU_ITEM}           Dirty
 ${DELAY}               1s
 ${TIMEOUT}             30s
 
@@ -21,9 +20,10 @@ Open Browser To Website
 
 Add to cart
     [Documentation]  Add beverage to cart page.
-    Click Element    xpath=//div[@id="Card" and .//h3[@id="CardTitle" and text()="${MENU_ITEM}"]]//button[@id="Addbtn"]
+    Execute JavaScript    window.scrollBy(0, 700)
+    Click Element   xpath=//div[@class='Card_cardAddToCart__ji65r']//button[@id='Addbtn' and text()='+']
     Wait Until Element Is Visible    id=description-page    timeout=${TIMEOUT}
-    Click Element    xpath=//button[text()='Add to Cart']
+    Click Element    xpath=//button[contains(@class, 'description_add-to-cart') and text()='Add to Cart']
     Sleep    ${DELAY}
 
 Go To Cart Page
