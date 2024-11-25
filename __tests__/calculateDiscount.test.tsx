@@ -50,7 +50,7 @@ describe("Discount Calculation Test Suite", () => {
   it("T2: Discount applied with promotion 2 for single item", () => {
     const promotion: Promotion = {
       Pro_ID: "002",
-      Promo_Description: "Discount every Friday from 1pm until 4pm",
+      Promo_Description: "Discount every Friday from 1pm until 4pm every second drink got 50% discount",
     };
     const discount = calculateDiscount(
       promotion,
