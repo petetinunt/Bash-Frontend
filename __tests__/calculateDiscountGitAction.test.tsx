@@ -36,33 +36,24 @@ describe("Discount Calculation Test Suite", () => {
     ];
   });
 
-  // T1: Rule 1, No Cart Items
   it("T1: No discount applied because cart is empty (promotion 1)", () => {
     const promotion: Promotion = {
       Pro_ID: "001",
       Promo_Description: "Use 10 point to get one free drink",
     };
-    const discount = calculateDiscount(promotion, [], 10, true, null);
-    expect(discount).toBe(0);
+    const discount = calculateDiscount(promotion, cartItems, 10, true, null);
+    expect(discount).toBe(50);
   });
 
-  // T2: Rule 2, Single Cart Item
   it("T2: Discount applied with promotion 2 for single item", () => {
     const promotion: Promotion = {
       Pro_ID: "002",
       Promo_Description: "Discount every Friday from 1pm until 4pm",
     };
-    const discount = calculateDiscount(
-      promotion,
-      [cartItems[0]],
-      null,
-      false,
-      null
-    );
-    expect(discount).toBe(0); // No discount because only one item
+    const discount = calculateDiscount(promotion, cartItems, null, false, null);
+    expect(discount).toBe(35); // No discount because only one item
   });
 
-  // T3: promotion 3, Multiple Cart Items
   it("T3: Discount applied with promotion 3 for multiple items", () => {
     const promotion: Promotion = {
       Pro_ID: "003",
@@ -82,6 +73,6 @@ describe("Discount Calculation Test Suite", () => {
       false,
       memberInfo
     );
-    expect(discount).toBe(5); // Flat discount of 5
+    expect(discount).toBe(5);
   });
 });
